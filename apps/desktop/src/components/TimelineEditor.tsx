@@ -180,35 +180,43 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
 
   return (
     <section
-      className="border-t border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--app-bg)] px-5 py-4"
+      className="min-h-0 border-t border-[color-mix(in_srgb,var(--dust-grey)_12%,transparent)] bg-[var(--app-bg)] px-2 py-2"
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      <div className="mb-3 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="font-semibold">Timeline Editor</h2>
-          <p className="text-xs text-[var(--dust-grey)]">
-            Drag clips to move, use edge handles to trim, press S to split, Delete to remove, +/- to zoom.
-          </p>
+      <div className="mb-2 flex items-center justify-between gap-4 border-b border-[color-mix(in_srgb,var(--dust-grey)_10%,transparent)] pb-2">
+        <div className="flex items-center gap-2 text-xs text-[var(--dust-grey)]">
+          {['+', '⌁', '↶', '↷', '⌫', '▱'].map((item) => (
+            <button
+              className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-[var(--app-panel)] hover:text-[var(--floral-white)]"
+              key={item}
+              type="button"
+            >
+              {item}
+            </button>
+          ))}
+          <span className="ml-2 hidden text-[11px] sm:inline">
+            Drag clips, trim edges, press S to split, Delete to remove.
+          </span>
         </div>
-        <div className="flex items-center gap-3 text-xs text-[var(--dust-grey)]">
+        <div className="flex shrink-0 items-center gap-2 text-xs text-[var(--dust-grey)]">
           <button
-            className="rounded-lg bg-[var(--light-caramel)] px-3 py-1.5 font-semibold text-[var(--app-bg)]"
+            className="rounded-md bg-[var(--light-caramel)] px-3 py-1.5 font-semibold text-[var(--app-bg)]"
             onClick={() => selectedClipId && splitClip(selectedClipId, playheadSeconds)}
             type="button"
           >
             Split
           </button>
           <button
-            className="rounded-lg border border-[color-mix(in_srgb,var(--dust-grey)_35%,transparent)] px-3 py-1.5"
+            className="rounded-md border border-[color-mix(in_srgb,var(--dust-grey)_35%,transparent)] px-2 py-1.5"
             onClick={() => setZoom(pixelsPerSecond - 8)}
             type="button"
           >
             -
           </button>
-          <span>{pixelsPerSecond}px/s</span>
+          <span className="w-14 text-center">{pixelsPerSecond}px/s</span>
           <button
-            className="rounded-lg border border-[color-mix(in_srgb,var(--dust-grey)_35%,transparent)] px-3 py-1.5"
+            className="rounded-md border border-[color-mix(in_srgb,var(--dust-grey)_35%,transparent)] px-2 py-1.5"
             onClick={() => setZoom(pixelsPerSecond + 8)}
             type="button"
           >
@@ -218,7 +226,7 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
       </div>
 
       <div
-        className="relative h-64 overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-panel)] p-3"
+        className="relative h-[236px] overflow-auto rounded-lg border border-[color-mix(in_srgb,var(--dust-grey)_12%,transparent)] bg-[var(--app-panel)] p-2"
         onPointerDown={handleTimelinePointerDown}
         ref={timelineRef}
       >
@@ -247,7 +255,7 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
 
             return (
               <div
-                className="absolute left-0 rounded-xl border border-[color-mix(in_srgb,var(--dust-grey)_14%,transparent)] bg-[var(--app-bg)]"
+                className="absolute left-0 rounded-md border border-[color-mix(in_srgb,var(--dust-grey)_10%,transparent)] bg-[var(--app-bg)]"
                 key={track.id}
                 style={{ height: trackHeight, top, width }}
               >
@@ -267,7 +275,7 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
                       <div
                         className={`absolute top-2 flex h-10 cursor-grab items-center overflow-hidden rounded-lg border text-xs shadow-lg ${
                           isSelected
-                            ? 'border-[var(--light-caramel)] bg-[var(--app-raised)]'
+                            ? 'border-[var(--light-caramel)] bg-[color-mix(in_srgb,var(--light-caramel)_35%,var(--app-raised))]'
                             : 'border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-raised)]'
                         }`}
                         key={clip.id}

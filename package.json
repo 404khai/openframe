@@ -1,0 +1,16 @@
+{
+  "name": "openframe",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/desktop"
+  ],
+  "scripts": {
+    "dev": "npm run tauri:dev --workspace @openframe/desktop",
+    "build": "npm run build --workspace @openframe/desktop",
+    "lint": "npm run lint --workspace @openframe/desktop",
+    "typecheck": "npm run typecheck --workspace @openframe/desktop",
+    "tauri": "npm run tauri --workspace @openframe/desktop"
+  }
+}

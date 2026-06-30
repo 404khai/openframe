@@ -1,0 +1,16 @@
+[workspace]
+members = [
+  "apps/desktop/src-tauri",
+  "crates/core",
+  "crates/media",
+  "crates/audio",
+  "crates/subtitles",
+  "crates/export",
+  "crates/ai",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/openframe/openframe"

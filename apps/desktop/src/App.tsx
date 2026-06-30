@@ -1,7 +1,9 @@
 import { convertFileSrc, invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
 import { useMemo, useRef, useState, type DragEvent } from 'react';
+import { TimelineEditor } from './components/TimelineEditor';
 import { useMediaStore } from './stores/mediaStore';
+import { useTimelineStore } from './stores/timelineStore';
 import type { ImportedMedia, ImportedMediaMetadata, MediaKind } from './types/media';
 
 const acceptedExtensions = [
@@ -111,6 +113,7 @@ async function mediaFromBrowserFile(file: File): Promise<ImportedMedia> {
 
 export default function App() {
   const { items, selectedId, addItems, selectItem, clear } = useMediaStore();
+  const { addMediaClip, clearTimeline } = useTimelineStore();
   const [isDragging, setIsDragging] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [error, setError] = useState<string>();
@@ -126,6 +129,7 @@ export default function App() {
     try {
       const media = await Promise.all(paths.map(importMediaPath));
       addItems(media);
+      media.forEach(addMediaClip);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -167,6 +171,7 @@ export default function App() {
     try {
       const media = await Promise.all(files.map(mediaFromBrowserFile));
       addItems(media);
+      media.forEach(addMediaClip);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -175,7 +180,7 @@ export default function App() {
   }
 
   return (
-    <main className="grid h-screen grid-rows-[auto_1fr_auto] overflow-hidden bg-[var(--carbon-black)] text-[var(--floral-white)]">
+    <main className="grid h-screen grid-rows-[auto_1fr_auto] overflow-hidden bg-[#252422ff] text-[var(--floral-white)]">
       <header className="flex items-center justify-between border-b border-[color-mix(in_srgb,var(--dust-grey)_22%,transparent)] bg-[var(--carbon-black)] px-6 py-4">
         <div className="flex items-center gap-4">
           <img alt="OpenFrame" className="h-12 w-12 rounded-2xl" src="/openframe-dark.png" />
@@ -189,7 +194,10 @@ export default function App() {
         <div className="flex items-center gap-3">
           <button
             className="rounded-xl border border-[color-mix(in_srgb,var(--dust-grey)_45%,transparent)] px-4 py-2 text-sm text-[var(--dust-grey)] transition hover:border-[var(--floral-white)] hover:text-[var(--floral-white)]"
-            onClick={clear}
+            onClick={() => {
+              clear();
+              clearTimeline();
+            }}
             type="button"
           >
             Clear
@@ -206,7 +214,7 @@ export default function App() {
       </header>
 
       <section className="grid min-h-0 grid-cols-[340px_1fr]">
-        <aside className="flex min-h-0 flex-col border-r border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--charcoal-brown)]">
+        <aside className="flex min-h-0 flex-col border-r border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[#252422ff]">
           <div className="border-b border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] px-4 py-3">
             <h2 className="font-semibold">Media Bin</h2>
             <p className="text-sm text-[var(--dust-grey)]">{items.length} imported item{items.length === 1 ? '' : 's'}</p>
@@ -257,12 +265,12 @@ export default function App() {
           </div>
         </aside>
 
-        <div className="grid min-h-0 grid-rows-[1fr_210px] bg-[color-mix(in_srgb,var(--carbon-black)_86%,black)]">
+        <div className="grid min-h-0 grid-rows-[minmax(260px,1fr)_minmax(260px,330px)] bg-[#252422ff]">
           <section
             className={`m-6 flex min-h-0 items-center justify-center rounded-[2rem] border ${
               isDragging
                 ? 'border-[var(--light-caramel)] bg-[color-mix(in_srgb,var(--light-caramel)_16%,transparent)]'
-                : 'border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[color-mix(in_srgb,var(--charcoal-brown)_48%,black)]'
+                : 'border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[#403d39ff]'
             }`}
             onDragLeave={() => setIsDragging(false)}
             onDragOver={(event) => {
@@ -284,7 +292,7 @@ export default function App() {
             )}
           </section>
 
-          <Inspector item={selectedItem} />
+          <TimelineEditor mediaItems={items} onSelectMedia={selectItem} />
         </div>
       </section>
 

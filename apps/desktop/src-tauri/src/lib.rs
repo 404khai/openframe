@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::{
     collections::hash_map::DefaultHasher,
+    env,
     fs,
     hash::{Hash, Hasher},
     path::{Path, PathBuf},
@@ -127,7 +128,7 @@ fn media_kind(extension: Option<&str>) -> String {
 }
 
 fn probe_media(path: &Path) -> Result<ProbeOutput, String> {
-    let output = Command::new("ffprobe")
+    let output = Command::new(binary_path("ffprobe")?)
         .args([
             "-v",
             "error",
@@ -158,7 +159,7 @@ fn generate_thumbnail(
         .map(|duration| (duration * 0.15).clamp(0.0, 2.0))
         .unwrap_or(0.0)
         .to_string();
-    let status = Command::new("ffmpeg")
+    let status = Command::new(binary_path("ffmpeg")?)
         .args(["-hide_banner", "-loglevel", "error", "-y", "-ss", &seek_seconds])
         .arg("-i")
         .arg(input)
@@ -183,7 +184,7 @@ fn generate_thumbnail(
 
 fn generate_waveform(input: &Path, cache_dir: &Path, cache_key: &str) -> Result<String, String> {
     let output = cache_dir.join(format!("{cache_key}-waveform.png"));
-    let status = Command::new("ffmpeg")
+    let status = Command::new(binary_path("ffmpeg")?)
         .args(["-hide_banner", "-loglevel", "error", "-y"])
         .arg("-i")
         .arg(input)
@@ -204,6 +205,25 @@ fn generate_waveform(input: &Path, cache_dir: &Path, cache_key: &str) -> Result<
     } else {
         Err("ffmpeg waveform command failed".to_string())
     }
+}
+
+fn binary_path(name: &str) -> Result<PathBuf, String> {
+    if let Some(path) = env::var_os("PATH").and_then(|paths| {
+        env::split_paths(&paths)
+            .map(|path| path.join(name))
+            .find(|candidate| candidate.is_file())
+    }) {
+        return Ok(path);
+    }
+
+    [
+        PathBuf::from(format!("/opt/homebrew/bin/{name}")),
+        PathBuf::from(format!("/usr/local/bin/{name}")),
+        PathBuf::from(format!("/usr/bin/{name}")),
+    ]
+    .into_iter()
+    .find(|candidate| candidate.is_file())
+    .ok_or_else(|| format!("failed to find {name}; install FFmpeg or add it to PATH"))
 }
 
 fn cache_dir() -> Result<PathBuf, String> {

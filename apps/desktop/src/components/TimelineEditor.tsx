@@ -180,7 +180,7 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
 
   return (
     <section
-      className="border-t border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[#252422ff] px-5 py-4"
+      className="border-t border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--app-bg)] px-5 py-4"
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
@@ -193,7 +193,7 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
         </div>
         <div className="flex items-center gap-3 text-xs text-[var(--dust-grey)]">
           <button
-            className="rounded-lg bg-[var(--light-caramel)] px-3 py-1.5 font-semibold text-[var(--carbon-black)]"
+            className="rounded-lg bg-[var(--light-caramel)] px-3 py-1.5 font-semibold text-[var(--app-bg)]"
             onClick={() => selectedClipId && splitClip(selectedClipId, playheadSeconds)}
             type="button"
           >
@@ -218,7 +218,7 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
       </div>
 
       <div
-        className="relative h-64 overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[#403d39ff] p-3"
+        className="relative h-64 overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-panel)] p-3"
         onPointerDown={handleTimelinePointerDown}
         ref={timelineRef}
       >
@@ -247,11 +247,11 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
 
             return (
               <div
-                className="absolute left-0 rounded-xl border border-[color-mix(in_srgb,var(--dust-grey)_14%,transparent)] bg-[#252422ff]"
+                className="absolute left-0 rounded-xl border border-[color-mix(in_srgb,var(--dust-grey)_14%,transparent)] bg-[var(--app-bg)]"
                 key={track.id}
                 style={{ height: trackHeight, top, width }}
               >
-                <div className="sticky left-0 z-10 flex h-full w-28 items-center border-r border-[color-mix(in_srgb,var(--dust-grey)_14%,transparent)] bg-[#252422ff] px-3 text-xs font-semibold text-[var(--dust-grey)]">
+                <div className="sticky left-0 z-10 flex h-full w-28 items-center border-r border-[color-mix(in_srgb,var(--dust-grey)_14%,transparent)] bg-[var(--app-bg)] px-3 text-xs font-semibold text-[var(--dust-grey)]">
                   {track.name}
                 </div>
 
@@ -267,8 +267,8 @@ export function TimelineEditor({ mediaItems, onSelectMedia }: TimelineEditorProp
                       <div
                         className={`absolute top-2 flex h-10 cursor-grab items-center overflow-hidden rounded-lg border text-xs shadow-lg ${
                           isSelected
-                            ? 'border-[var(--light-caramel)] bg-[color-mix(in_srgb,var(--light-caramel)_38%,var(--charcoal-brown))]'
-                            : 'border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[color-mix(in_srgb,var(--charcoal-brown)_76%,var(--carbon-black))]'
+                            ? 'border-[var(--light-caramel)] bg-[var(--app-raised)]'
+                            : 'border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-raised)]'
                         }`}
                         key={clip.id}
                         onPointerDown={(event) => startInteraction(event, clip, 'move')}

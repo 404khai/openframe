@@ -180,18 +180,18 @@ export default function App() {
   }
 
   return (
-    <main className="grid h-screen grid-rows-[auto_1fr_auto] overflow-hidden bg-[#252422ff] text-[var(--floral-white)]">
-      <header className="flex items-center justify-between border-b border-[color-mix(in_srgb,var(--dust-grey)_22%,transparent)] bg-[var(--carbon-black)] px-6 py-4">
-        <div className="flex items-center gap-4">
+    <main className="grid h-screen grid-rows-[auto_1fr_auto] overflow-hidden bg-[var(--app-bg)] text-[var(--floral-white)]">
+      <header className="flex min-w-0 items-center gap-4 border-b border-[color-mix(in_srgb,var(--dust-grey)_22%,transparent)] bg-[var(--app-bg)] px-5 py-3">
+        <div className="flex min-w-0 items-center gap-4">
           <img alt="OpenFrame" className="h-12 w-12 rounded-2xl" src="/openframe-dark.png" />
-          <div>
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--light-caramel)]">
               OpenFrame
             </p>
-            <h1 className="text-2xl font-semibold tracking-tight">Media Pipeline</h1>
+            <h1 className="truncate text-2xl font-semibold tracking-tight">Timeline Editor</h1>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-3">
           <button
             className="rounded-xl border border-[color-mix(in_srgb,var(--dust-grey)_45%,transparent)] px-4 py-2 text-sm text-[var(--dust-grey)] transition hover:border-[var(--floral-white)] hover:text-[var(--floral-white)]"
             onClick={() => {
@@ -203,7 +203,7 @@ export default function App() {
             Clear
           </button>
           <button
-            className="rounded-xl bg-[var(--light-caramel)] px-4 py-2 text-sm font-semibold text-[var(--carbon-black)] shadow-lg shadow-black/25 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl bg-[var(--light-caramel)] px-5 py-2.5 text-sm font-semibold text-[var(--app-bg)] shadow-lg shadow-black/25 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
             disabled={isImporting}
             onClick={handlePickFiles}
             type="button"
@@ -214,25 +214,43 @@ export default function App() {
       </header>
 
       <section className="grid min-h-0 grid-cols-[340px_1fr]">
-        <aside className="flex min-h-0 flex-col border-r border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[#252422ff]">
-          <div className="border-b border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] px-4 py-3">
-            <h2 className="font-semibold">Media Bin</h2>
-            <p className="text-sm text-[var(--dust-grey)]">{items.length} imported item{items.length === 1 ? '' : 's'}</p>
+        <aside className="flex min-h-0 flex-col border-r border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--app-bg)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] px-4 py-3">
+            <div>
+              <h2 className="font-semibold">Media Bin</h2>
+              <p className="text-sm text-[var(--dust-grey)]">{items.length} imported item{items.length === 1 ? '' : 's'}</p>
+            </div>
+            <button
+              className="rounded-lg bg-[var(--light-caramel)] px-3 py-2 text-xs font-semibold text-[var(--app-bg)] transition hover:brightness-110 disabled:opacity-60"
+              disabled={isImporting}
+              onClick={handlePickFiles}
+              type="button"
+            >
+              Import
+            </button>
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto p-3">
             {items.length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--dust-grey)_35%,transparent)] p-4 text-sm text-[var(--dust-grey)]">
-                Import or drag media into the app to run FFprobe metadata extraction and generate previews.
-              </p>
+              <div className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--dust-grey)_35%,transparent)] bg-[var(--app-panel)] p-4 text-sm text-[var(--dust-grey)]">
+                <p>Import or drag media into the app to run FFprobe metadata extraction and generate previews.</p>
+                <button
+                  className="mt-4 w-full rounded-xl bg-[var(--light-caramel)] px-4 py-2.5 text-sm font-semibold text-[var(--app-bg)] transition hover:brightness-110 disabled:opacity-60"
+                  disabled={isImporting}
+                  onClick={handlePickFiles}
+                  type="button"
+                >
+                  {isImporting ? 'Importing...' : 'Import Media'}
+                </button>
+              </div>
             ) : (
               <div className="space-y-3">
                 {items.map((item) => (
                   <button
                     className={`w-full overflow-hidden rounded-2xl border text-left transition ${
                       selectedItem?.id === item.id
-                        ? 'border-[var(--light-caramel)] bg-[color-mix(in_srgb,var(--light-caramel)_16%,var(--carbon-black))]'
-                        : 'border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[color-mix(in_srgb,var(--carbon-black)_72%,var(--charcoal-brown))] hover:border-[color-mix(in_srgb,var(--light-caramel)_55%,transparent)]'
+                        ? 'border-[var(--light-caramel)] bg-[var(--app-raised)]'
+                        : 'border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-panel)] hover:border-[color-mix(in_srgb,var(--light-caramel)_55%,transparent)]'
                     }`}
                     key={item.id}
                     onClick={() => selectItem(item.id)}
@@ -243,14 +261,14 @@ export default function App() {
                     ) : item.waveformUrl ? (
                       <img
                         alt=""
-                        className="h-28 w-full bg-[var(--carbon-black)] object-contain p-3"
+                        className="h-28 w-full bg-[var(--app-bg)] object-contain p-3"
                         src={item.waveformUrl}
                       />
                     ) : null}
                     <div className="p-3">
                       <div className="flex items-center justify-between gap-3">
                         <p className="truncate text-sm font-medium">{item.name}</p>
-                        <span className="rounded-full bg-[var(--carbon-black)] px-2 py-1 text-xs uppercase text-[var(--light-caramel)]">
+                        <span className="rounded-full bg-[var(--app-bg)] px-2 py-1 text-xs uppercase text-[var(--light-caramel)]">
                           {item.kind}
                         </span>
                       </div>
@@ -265,12 +283,12 @@ export default function App() {
           </div>
         </aside>
 
-        <div className="grid min-h-0 grid-rows-[minmax(260px,1fr)_minmax(260px,330px)] bg-[#252422ff]">
+        <div className="grid min-h-0 grid-rows-[minmax(260px,1fr)_minmax(260px,330px)] bg-[var(--app-bg)]">
           <section
             className={`m-6 flex min-h-0 items-center justify-center rounded-[2rem] border ${
               isDragging
                 ? 'border-[var(--light-caramel)] bg-[color-mix(in_srgb,var(--light-caramel)_16%,transparent)]'
-                : 'border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[#403d39ff]'
+                : 'border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--app-panel)]'
             }`}
             onDragLeave={() => setIsDragging(false)}
             onDragOver={(event) => {
@@ -288,6 +306,14 @@ export default function App() {
                 <p className="mt-2 text-sm text-[var(--dust-grey)]">
                   OpenFrame now probes imported media, extracts duration, generates thumbnails, and creates waveform previews.
                 </p>
+                <button
+                  className="mt-5 rounded-xl bg-[var(--light-caramel)] px-5 py-2.5 text-sm font-semibold text-[var(--app-bg)] transition hover:brightness-110 disabled:opacity-60"
+                  disabled={isImporting}
+                  onClick={handlePickFiles}
+                  type="button"
+                >
+                  {isImporting ? 'Importing...' : 'Import Media'}
+                </button>
               </div>
             )}
           </section>
@@ -339,12 +365,12 @@ function Preview({ item }: { item: ImportedMedia }) {
 
   if (item.kind === 'audio') {
     return (
-      <div className="w-full max-w-3xl rounded-[2rem] border border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--carbon-black)] p-6">
+      <div className="w-full max-w-3xl rounded-[2rem] border border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--app-panel)] p-6">
         <p className="mb-4 font-medium">{item.name}</p>
         {item.waveformUrl ? (
           <img
             alt="Audio waveform"
-            className="mb-5 h-32 w-full rounded-2xl bg-black object-contain p-3"
+            className="mb-5 h-32 w-full rounded-2xl bg-[var(--app-bg)] object-contain p-3"
             src={item.waveformUrl}
           />
         ) : null}
@@ -391,7 +417,7 @@ function Scrubber({
   }
 
   return (
-    <div className="w-full max-w-3xl rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[color-mix(in_srgb,var(--carbon-black)_82%,black)] p-3">
+    <div className="w-full max-w-3xl rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-raised)] p-3">
       {waveformUrl ? <img alt="" className="mb-2 h-12 w-full object-cover opacity-80" src={waveformUrl} /> : null}
       <div className="flex items-center gap-3">
         <span className="w-12 text-xs tabular-nums text-[var(--dust-grey)]">{formatDuration(currentTime)}</span>
@@ -412,7 +438,7 @@ function Scrubber({
 
 function Inspector({ item }: { item?: ImportedMedia }) {
   return (
-    <section className="border-t border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--carbon-black)] px-6 py-4">
+    <section className="border-t border-[color-mix(in_srgb,var(--dust-grey)_20%,transparent)] bg-[var(--app-bg)] px-6 py-4">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="font-semibold">Media Pipeline</h2>
         <span className="text-xs uppercase tracking-[0.2em] text-[var(--light-caramel)]">Phase 2</span>
@@ -428,7 +454,7 @@ function Inspector({ item }: { item?: ImportedMedia }) {
               value={item.audioSampleRate ? `${item.audioSampleRate} Hz · ${item.audioChannels ?? 0} ch` : 'None'}
             />
           </div>
-          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[color-mix(in_srgb,var(--charcoal-brown)_45%,black)] p-3">
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-panel)] p-3">
             <p className="mb-2 truncate text-sm font-medium">{item.path ?? item.name}</p>
             {item.waveformUrl ? (
               <img alt="Waveform preview" className="h-16 w-full rounded-lg object-cover" src={item.waveformUrl} />
@@ -438,7 +464,7 @@ function Inspector({ item }: { item?: ImportedMedia }) {
           </div>
         </div>
       ) : (
-        <div className="flex h-32 items-center rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--dust-grey)_30%,transparent)] bg-[color-mix(in_srgb,var(--charcoal-brown)_45%,black)] px-4 text-sm text-[var(--dust-grey)]">
+        <div className="flex h-32 items-center rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--dust-grey)_30%,transparent)] bg-[var(--app-panel)] px-4 text-sm text-[var(--dust-grey)]">
           Import media to see FFprobe metadata, thumbnail previews, waveform previews, and playback controls.
         </div>
       )}
@@ -448,7 +474,7 @@ function Inspector({ item }: { item?: ImportedMedia }) {
 
 function MetadataCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[color-mix(in_srgb,var(--charcoal-brown)_45%,black)] p-3">
+    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--dust-grey)_18%,transparent)] bg-[var(--app-panel)] p-3">
       <p className="text-xs uppercase tracking-[0.18em] text-[var(--dust-grey)]">{label}</p>
       <p className="mt-2 truncate font-semibold text-[var(--floral-white)]">{value}</p>
     </div>

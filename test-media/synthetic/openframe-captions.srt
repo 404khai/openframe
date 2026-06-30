@@ -1,0 +1,11 @@
+1
+00:00:00,000 --> 00:00:02,000
+Welcome to OpenFrame.
+
+2
+00:00:02,000 --> 00:00:04,500
+This is a synthetic subtitle fixture.
+
+3
+00:00:04,500 --> 00:00:06,000
+It is safe to commit.
